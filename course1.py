@@ -18,6 +18,7 @@ api = Api(app, version='1.0', title=mainTitle, description=descriptiveTextCourse
 
 questionString  = "i like python programming"
 questionString2 = "i really do"
+my_name = "Robert-Jan Lub"
 
 @api.route('/hints')
 
@@ -43,6 +44,30 @@ class question3(Resource):
 
      def get(self):
          return question1_3
+
+
+@api.route('/myname')
+class myname(Resource):
+
+    def get(self):
+        return my_name
+
+
+@api.route('/mynameUppercase')
+class mynameUppercase(Resource):
+
+    def get(self):
+        return my_name.upper()
+
+
+@api.route('/concattedStrings')
+class concattedStrings(Resource):
+
+    res = questionString + questionString2
+    def get(self):
+        return self.res
+
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))

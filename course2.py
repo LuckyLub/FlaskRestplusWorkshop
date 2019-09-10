@@ -7,6 +7,7 @@ import os
 from flask import Flask
 from flask import request
 from flask_restplus import Api, Resource, fields
+from flask_restplus import reqparse
 from werkzeug.contrib.fixers import ProxyFix
 
 from texts import *
@@ -18,7 +19,6 @@ api = Api(app, version='1.0', title='flask restplus workshop', description=descr
 
 
 @api.route('/hints')
-
 class hints(Resource):
     @api.doc(responses={200: 'Ok'})
     def get(self):
@@ -51,6 +51,40 @@ class question4(Resource):
 
     def get(self):
         return question2_4
+
+@api.doc(params={'parma' : 'int' , 'parb' :'int' })
+@api.route('/sum')
+class sum(Resource):
+
+    def get(self):
+        args = request.args
+        no1 = int(args['parma'])
+        no2 = int(args['parb'])
+        res = no1 + no2
+        return res
+
+    def post(self):
+        args = request.args
+        no1 = int(args['parma'])
+        no2 = int(args['parb'])
+        res = no1 + no2
+        return res
+
+@api.route('/compute/<string:action>/<int:parma>/<int:parb>')
+class compute(Resource):
+
+    def post(self, action, parma, parb):
+
+        if action == "add":
+            return parma + parb
+        elif action == 'subtract':
+            return parma - parb
+        elif action == 'multiply':
+            return parma * parb
+        elif action == 'devide':
+            return parma / parb
+        else:
+            return "No valid action. Possible actions are  'add', 'subtract', 'multiply' or 'devide'."
 
 
 if __name__ == "__main__":

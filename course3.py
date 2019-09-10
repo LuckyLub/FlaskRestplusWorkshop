@@ -3,6 +3,7 @@
 import string
 import random
 import os
+import json
 
 from flask import Flask
 from flask import request
@@ -29,6 +30,7 @@ class hints(Resource):
     def get(self):
         return course3_hints
 
+
 @api.route('/question1')
 class question1(Resource):
     def get(self):
@@ -40,10 +42,40 @@ class question2(Resource):
     def get(self):
         return question3_2
 
+
 @api.route('/question3')
 class question3(Resource):
     def get(self):
         return question3_3
+
+
+@api.route('/returnJson')
+class returnJson(Resource):
+    def get(self):
+        res = json.dumps(awesomeDictionaryToReturn)
+        return res
+
+requestjson = api.model('Resource', {
+    'Origial Request': fields.String,
+})
+
+@api.route('/concatJson')
+class concatJson(Resource):
+    @api.expect(requestjson)
+    def post(self):
+        data = request.json
+        awesomeDictionaryToReturn["Original request"] = data['Request']
+        res = json.dumps(awesomeDictionaryToReturn)
+        return res
+
+@api.route('/modeledJson')
+class modeledJson(Resource):
+    @api.expect(requestjson)
+    def post(self):
+        data = request.json
+        awesomeDictionaryToReturn["Original request"] = data['Request']
+        res = json.dumps(awesomeDictionaryToReturn)
+        return res
 
 
 if __name__ == "__main__":
